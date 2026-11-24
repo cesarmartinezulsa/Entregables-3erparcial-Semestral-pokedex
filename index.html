@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#D52033">
+  <meta name="description" content="Pokédex de la primera generación: captura Pokémon escaneando códigos QR.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Pokédex">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/styles.css">
   <title>Pokédex</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/config.js"></script>
 </head>
 <body class="bg-neutral-900 font-sans">
 
@@ -19,7 +22,7 @@
     <header id="header" class="bg-dex px-4 pb-3 pt-6 transition-all">
       <h1 class="text-[28px] font-extrabold leading-none text-white">Pokédex</h1>
       <div id="header-progress" class="mt-3">
-        <p id="hdr-count" class="text-right text-[10px] font-medium text-white">1/151</p>
+        <p id="hdr-count" class="text-right text-[10px] font-medium text-white">0/151</p>
         <div class="mt-0.5 h-2 w-full overflow-hidden rounded-full bg-white">
           <div id="hdr-bar" class="h-full rounded-full bg-amber-400 transition-all" style="width:0%"></div>
         </div>
@@ -29,31 +32,18 @@
     <!-- Contenido -->
     <main class="relative flex-1 overflow-y-auto pb-28">
 
-      <!-- Mi Pokédex (contenido / vacío / cargando / error) -->
+      <!-- Mi Pokédex -->
       <section data-view="pokedex" class="p-4">
+        <div id="pokedex-vacio" class="mb-4 hidden items-center gap-3 rounded-2xl bg-white p-4 shadow-sm">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-neutral-200 text-neutral-500">
+            <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h6M15 12h6"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div>
+            <h2 class="text-sm font-extrabold text-neutral-900">Tu Pokédex está vacía</h2>
+            <p class="text-[11px] text-neutral-600">Escanea tu primer código QR para comenzar tu aventura.</p>
+          </div>
+        </div>
         <div id="pokedex-contenido" class="grid grid-cols-2 gap-3"></div>
-
-        <div id="pokedex-vacio" class="hidden flex-col items-center px-6 pt-16 text-center">
-          <div class="flex h-20 w-20 items-center justify-center rounded-full bg-white text-neutral-400">
-            <svg class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h6M15 12h6"/><circle cx="12" cy="12" r="3"/></svg>
-          </div>
-          <h2 class="mt-4 text-base font-extrabold text-neutral-900">Tu Pokédex está vacía</h2>
-          <p class="mt-1 text-xs text-neutral-600">Escanea tu primer código QR para comenzar tu aventura.</p>
-        </div>
-
-        <div id="pokedex-cargando" class="hidden flex-col items-center px-6 pt-20 text-center">
-          <div class="h-10 w-10 animate-spin rounded-full border-4 border-neutral-300 border-t-dex"></div>
-          <p class="mt-4 text-xs font-semibold text-neutral-700">Consultando Pokédex...</p>
-        </div>
-
-        <div id="pokedex-error" class="hidden flex-col items-center px-6 pt-16 text-center">
-          <div class="flex h-20 w-20 items-center justify-center rounded-full bg-white text-dex">
-            <svg class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5h.01"/></svg>
-          </div>
-          <h2 class="mt-4 text-base font-extrabold text-neutral-900">Algo salió mal</h2>
-          <p class="mt-1 text-xs text-neutral-600">No fue posible consultar la información del Pokémon.</p>
-          <button class="mt-4 rounded-full bg-dex px-6 py-2.5 text-xs font-semibold text-white active:scale-95" data-estado="contenido">Reintentar</button>
-        </div>
       </section>
 
       <!-- Progreso -->
@@ -70,7 +60,7 @@
               <span class="text-[10px] text-neutral-500">completed</span>
             </div>
           </div>
-          <p id="prog-count" class="mt-4 text-sm font-semibold text-neutral-800">1/151 pokemon</p>
+          <p id="prog-count" class="mt-4 text-sm font-semibold text-neutral-800">0/151 pokemon</p>
           <div class="mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-200">
             <div id="prog-bar" class="h-full rounded-full bg-amber-400 transition-all" style="width:0%"></div>
           </div>
@@ -79,15 +69,15 @@
         <div class="grid grid-cols-2 gap-3">
           <div class="rounded-2xl bg-white p-4 shadow-sm">
             <p class="text-[10px] text-neutral-500">Captured</p>
-            <p id="prog-cap" class="text-2xl font-extrabold text-neutral-900">1</p>
+            <p id="prog-cap" class="text-2xl font-extrabold text-neutral-900">0</p>
           </div>
           <div class="rounded-2xl bg-white p-4 shadow-sm">
             <p class="text-[10px] text-neutral-500">Still to find</p>
-            <p id="prog-falta" class="text-2xl font-extrabold text-neutral-900">150</p>
+            <p id="prog-falta" class="text-2xl font-extrabold text-neutral-900">151</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm">
+        <div id="prog-ultimo-card" class="hidden items-center gap-3 rounded-2xl bg-white p-4 shadow-sm">
           <img id="prog-ultimo-img" alt="" class="h-12 w-12 object-contain">
           <div>
             <p class="text-[10px] text-neutral-500">Latest capture</p>
@@ -105,7 +95,7 @@
           <h2 class="mt-3 text-xl font-extrabold text-neutral-900">Pokédex</h2>
           <p class="text-[10px] text-neutral-500">Pokédex app :D</p>
           <p class="mt-3 text-xs text-neutral-700">Captura Pokémon de la primera generación escaneando códigos QR.</p>
-          <p class="mt-2 text-[10px] text-neutral-400">Versión 1.0 · Primera entrega</p>
+          <p class="mt-2 text-[10px] text-neutral-400">Versión 1.0</p>
         </div>
 
         <div>
@@ -144,25 +134,23 @@
           </svg>
           <p class="text-xs font-semibold">Apunta la cámara al código QR</p>
         </div>
+
         <div class="relative mx-auto mt-4 aspect-square w-full max-w-[280px] rounded-2xl bg-neutral-300">
-          <span class="absolute left-3 top-3 h-8 w-8 rounded-tl-xl border-l-4 border-t-4 border-neutral-700"></span>
-          <span class="absolute right-3 top-3 h-8 w-8 rounded-tr-xl border-r-4 border-t-4 border-neutral-700"></span>
-          <span class="absolute bottom-3 left-3 h-8 w-8 rounded-bl-xl border-b-4 border-l-4 border-neutral-700"></span>
-          <span class="absolute bottom-3 right-3 h-8 w-8 rounded-br-xl border-b-4 border-r-4 border-neutral-700"></span>
+          <div id="qr-reader"></div>
+          <span class="pointer-events-none absolute left-3 top-3 z-10 h-8 w-8 rounded-tl-xl border-l-4 border-t-4 border-white"></span>
+          <span class="pointer-events-none absolute right-3 top-3 z-10 h-8 w-8 rounded-tr-xl border-r-4 border-t-4 border-white"></span>
+          <span class="pointer-events-none absolute bottom-3 left-3 z-10 h-8 w-8 rounded-bl-xl border-b-4 border-l-4 border-white"></span>
+          <span class="pointer-events-none absolute bottom-3 right-3 z-10 h-8 w-8 rounded-br-xl border-b-4 border-r-4 border-white"></span>
         </div>
 
-        <div class="mt-8 rounded-xl border border-dashed border-neutral-400 p-3">
-          <p class="mb-2 text-[10px] font-semibold text-neutral-500">Demo</p>
-          <div class="grid grid-cols-2 gap-2 text-[10px] font-semibold text-neutral-800">
-            <button data-toast="ok" class="rounded-lg bg-white py-2 active:scale-95">Toast: captura</button>
-            <button data-toast="repetido" class="rounded-lg bg-white py-2 active:scale-95">Toast: repetido</button>
-            <button data-toast="invalido" class="rounded-lg bg-white py-2 active:scale-95">Toast: QR inválido</button>
-            <button data-toast="conexion" class="rounded-lg bg-white py-2 active:scale-95">Toast: conexión</button>
-            <button data-estado="vacio" class="rounded-lg bg-white py-2 active:scale-95">Estado: vacío</button>
-            <button data-estado="cargando" class="rounded-lg bg-white py-2 active:scale-95">Estado: cargando</button>
-            <button data-estado="error" class="rounded-lg bg-white py-2 active:scale-95">Estado: error</button>
-            <button data-estado="contenido" class="rounded-lg bg-white py-2 active:scale-95">Estado: contenido</button>
-          </div>
+        <div id="scanner-msg" class="mx-auto mt-4 hidden max-w-[280px] rounded-xl bg-white p-3 text-center shadow-sm">
+          <p id="scanner-msg-text" class="text-xs text-neutral-700"></p>
+          <button data-accion="reintentar-camara" class="mt-2 rounded-full bg-dex px-4 py-2 text-[11px] font-semibold text-white active:scale-95">Reintentar</button>
+        </div>
+
+        <div class="mx-auto mt-4 max-w-[280px] text-center">
+          <button id="btn-imagen" class="rounded-full bg-white px-4 py-2 text-[11px] font-semibold text-neutral-800 shadow-sm active:scale-95">Elegir imagen del QR</button>
+          <input id="qr-file" type="file" accept="image/*" class="hidden">
         </div>
       </section>
     </main>
@@ -186,7 +174,7 @@
       </button>
     </nav>
 
-    <!-- Bottom Sheet: detalle del Pokémon -->
+    <!-- Bottom Sheet -->
     <div id="sheet-overlay" class="pointer-events-none absolute inset-0 z-20 bg-black/50 opacity-0 transition-opacity duration-300"></div>
     <div id="sheet" role="dialog" aria-modal="true" aria-label="Detalle del Pokémon"
          class="pointer-events-none absolute inset-x-0 bottom-0 z-30 max-h-[85%] translate-y-full overflow-y-auto rounded-t-3xl bg-[#ececec] px-6 pb-8 pt-3 text-center transition-transform duration-300">
@@ -202,7 +190,11 @@
     </div>
   </div>
 
-<script src="js/datos.js"></script>
-<script src="js/app.js"></script>
+  <script src="js/vendor/html5-qrcode.min.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/scanner.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

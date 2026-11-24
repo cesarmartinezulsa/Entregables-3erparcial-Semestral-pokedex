@@ -1,5 +1,7 @@
-const SPRITE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
 const TOTAL = 151;
+const API_URL = 'https://pokeapi.co/api/v2/pokemon/';
+const SPRITE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
+const STORAGE_KEY = 'pokemonCapturados';
 
 const COLOR_TIPO = {
   normal: '#C9C9B8', fire: '#F5A25D', water: '#6CB4F0', electric: '#F7D54A',
@@ -9,16 +11,31 @@ const COLOR_TIPO = {
   steel: '#B8B8D0', fairy: '#F4B8D0',
 };
 
-const POKEMON = Array.from({ length: TOTAL }, (_, i) => ({ id: i + 1, capturado: false }));
-POKEMON[0] = {
-  id: 1, name: 'Bulbasaur', types: ['grass', 'poison'], capturado: true,
-  height: '0.7 m', weight: '6.9 kg', abilities: ['Overgrow', 'Chlorophyll'],
-  stats: { HP: 45, Attack: 49, Defense: 49, 'Sp. Atk': 65, 'Sp. Def': 65, Speed: 45 },
+const EMOJI_TIPO = {
+  electric: '⚡', fire: '🔥', water: '💧', grass: '🌿', ice: '❄️',
+  ghost: '👻', dragon: '🐉', psychic: '🔮',
+};
+
+const NOMBRES_ESPECIALES = {
+  'nidoran-f': 'Nidoran ♀',
+  'nidoran-m': 'Nidoran ♂',
+  'mr-mime': 'Mr. Mime',
+  farfetchd: "Farfetch'd",
+};
+
+const NOMBRES_STATS = {
+  hp: 'HP',
+  attack: 'Attack',
+  defense: 'Defense',
+  'special-attack': 'Sp. Atk',
+  'special-defense': 'Sp. Def',
+  speed: 'Speed',
 };
 
 const MENSAJES = {
-  ok:       { texto: '¡Pikachu fue agregado a tu Pokédex! ⚡', color: 'bg-green-400' },
-  repetido: { texto: 'Este Pokémon ya había sido capturado.', color: 'bg-amber-400' },
-  invalido: { texto: 'Este código QR no pertenece a la Pokédex.', color: 'bg-red-500' },
-  conexion: { texto: 'No fue posible consultar la información del Pokémon.', color: 'bg-red-500' },
+  repetido: 'Este Pokémon ya había sido capturado.',
+  invalido: 'Este código QR no pertenece a la Pokédex.',
+  conexion: 'No fue posible consultar la información del Pokémon.',
+  ilegible: 'No se pudo leer el código QR. Intenta de nuevo.',
+  guardado: 'No se pudo guardar el Pokémon en este dispositivo.',
 };
